@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -56,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
-			//Handheld.Vibrate();
+			Handheld.Vibrate();
 			_rigidbody.AddForce(Vector2.down * 200f);
 			_rigidbody.AddTorque(30f);
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
@@ -64,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
 				_rigidbody.freezeRotation = true;
 				StartCoroutine(freezeTime());
 			}
-			//StartCoroutine(Restart());
 		}
 	}
 	private IEnumerator freezeTime()
@@ -73,11 +73,14 @@ public class PlayerMovement : MonoBehaviour
 		_rigidbody.velocity = Vector2.zero;
 		_rigidbody.freezeRotation = false;
 		Time.timeScale = 0;
+		StartCoroutine(Restart());
 	}
 
-	public void Restart()
+	private IEnumerator Restart()
 	{
-		transform.position = _startPos;
 		dead = false;
+		yield return new WaitForSeconds(0.05f);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		Time.timeScale = 1f;
 	}
 }

@@ -7,7 +7,7 @@ public class Pipe : MonoBehaviour
 
 	private void Start()
 	{
-		leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 2f;
+		leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 8f;
 	}
 
 	// Update is called once per frame
