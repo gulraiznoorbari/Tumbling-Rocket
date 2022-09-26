@@ -4,32 +4,41 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 	private GameObject _startPipe;
-	private Animator _animator;
 	private float _timer = 0;
-	private int _score;
 
 	[SerializeField] private GameObject _pipe;
 	[SerializeField] private TextMeshProUGUI _scoreText;
+	[SerializeField] private TextMeshProUGUI _levelScoreText;
 	[SerializeField] private float _startOffset;
 	[SerializeField] private float _maxTime = 1f;
 	[SerializeField] private float _minheight;
 	[SerializeField] private float _maxheight;
+	[SerializeField] private Animator _scoreAnimator;
+	[HideInInspector] public int _score;
+
+	private int ScoreAnimatorKey;
 
 	private void Awake()
 	{
 		Application.targetFrameRate = 60;
-		_animator = FindObjectOfType<Animator>();
+		ScoreAnimatorKey = Animator.StringToHash("score");
 		_score = 0;
 		_scoreText.SetText(_score.ToString());
+		Time.timeScale = 0;
 	}
 
 	private void Start()
 	{
-		transform.position = new Vector3(transform.position.x , transform.position.y, 0);
+		transform.position = new Vector3(transform.position.x + 1 , transform.position.y, 0);
 		_startPipe = Instantiate(_pipe, transform.position, Quaternion.identity);
 	}
 
 	private void Update()
+	{
+		SpawnPipe();
+	}
+
+	public void SpawnPipe()
 	{
 		if (_timer > _maxTime)
 		{
@@ -43,9 +52,14 @@ public class GameManager : MonoBehaviour
 
 	public void IncreaseScore()
 	{
-		_animator.SetTrigger("score");
+		_scoreAnimator.SetTrigger(ScoreAnimatorKey);
 		_score++;
 		_scoreText.SetText(_score.ToString());
+	}
+
+	public void GetScore()
+	{
+		_levelScoreText.SetText(_score.ToString());
 	}
 
 	public void PauseGame()

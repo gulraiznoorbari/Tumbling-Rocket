@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
 	private Touch _touch;
 	private Rigidbody2D _rigidbody;
-	private Vector2 _startPos;
 	private float gravity;
-	private bool dead;
+	[HideInInspector] public Vector2 _startPos;
+	[HideInInspector] public bool dead;
 
+	[SerializeField] private GameObject _gameOverMenu;
 	public static PlayerMovement instance;
 
-	private void Start()
+	private void Awake()
 	{
+		Time.timeScale = 0;
 		instance = this;
 		_rigidbody = GetComponent<Rigidbody2D>();
 		_startPos = transform.position;
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
 		{
-			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1700f);
+			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1400f);
 		}
 
 		if (Input.touchCount > 0)
@@ -39,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
 			_touch = Input.GetTouch(0);
 			if (_touch.phase == TouchPhase.Began)
 			{
-				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1700f);
+				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1400f);
 			}
 		}
 	}
@@ -57,30 +58,23 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
-			Handheld.Vibrate();
-			_rigidbody.AddForce(Vector2.down * 200f);
+			_rigidbody.AddForce(Vector2.down * 150f);
 			_rigidbody.AddTorque(30f);
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
 			{
 				_rigidbody.freezeRotation = true;
-				StartCoroutine(freezeTime());
+				StartCoroutine(FreezeTime());
 			}
 		}
 	}
-	private IEnumerator freezeTime()
+	private IEnumerator FreezeTime()
 	{
 		yield return new WaitForSeconds(1f);
 		_rigidbody.velocity = Vector2.zero;
 		_rigidbody.freezeRotation = false;
 		Time.timeScale = 0;
-		StartCoroutine(Restart());
-	}
-
-	private IEnumerator Restart()
-	{
 		dead = false;
-		yield return new WaitForSeconds(0.05f);
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-		Time.timeScale = 1f;
+		FindObjectOfType<GameManager>().GetScore();
+		_gameOverMenu.SetActive(true);
 	}
 }

@@ -11,6 +11,7 @@ TagManager:
   - Lower Obstacle
   - ScoreDetector
   - Pipe
+  - Audio
   layers:
   - Default
   - TransparentFX
