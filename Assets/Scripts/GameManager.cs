@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
+		//FindObjectOfType<AudioManager>().PlayBGSong();
 		transform.position = new Vector3(transform.position.x + 1 , transform.position.y, 0);
 		_startPipe = Instantiate(_pipe, transform.position, Quaternion.identity);
 	}
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
 
 	public void IncreaseScore()
 	{
+		FindObjectOfType<AudioManager>().PlaySFX("Score");
 		_scoreAnimator.SetTrigger(ScoreAnimatorKey);
 		_score++;
 		_scoreText.SetText(_score.ToString());

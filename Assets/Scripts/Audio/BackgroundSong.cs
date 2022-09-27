@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class Sound
+public class BackgroundSong
 {
-
 	public string name;
 
 	public AudioClip clip;
@@ -15,6 +14,7 @@ public class Sound
 	public float pitch;
 
 	public bool loop = false;
+	public bool playOnAwake = true;
 	public bool mute = false;
 
 	[HideInInspector]

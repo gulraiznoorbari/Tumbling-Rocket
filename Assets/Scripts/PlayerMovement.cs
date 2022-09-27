@@ -5,20 +5,22 @@ public class PlayerMovement : MonoBehaviour
 {
 	private Touch _touch;
 	private Rigidbody2D _rigidbody;
-	private float gravity;
-	[HideInInspector] public Vector2 _startPos;
 	[HideInInspector] public bool dead;
-
+	private float gravity;
 	[SerializeField] private GameObject _gameOverMenu;
+
+	[SerializeField] private ParticleSystem ps;
+	private ParticleSystem.EmissionModule emission;
+
 	public static PlayerMovement instance;
 
 	private void Awake()
 	{
-		Time.timeScale = 0;
 		instance = this;
 		_rigidbody = GetComponent<Rigidbody2D>();
-		_startPos = transform.position;
 		gravity = _rigidbody.gravityScale;
+		emission = ps.emission;
+		Time.timeScale = 0;
 	}
 
 	private void Update()
@@ -32,7 +34,8 @@ public class PlayerMovement : MonoBehaviour
 
 		if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
 		{
-			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1400f);
+			FindObjectOfType<AudioManager>().PlaySFX("Player");
+			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
 		}
 
 		if (Input.touchCount > 0)
@@ -40,7 +43,8 @@ public class PlayerMovement : MonoBehaviour
 			_touch = Input.GetTouch(0);
 			if (_touch.phase == TouchPhase.Began)
 			{
-				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1400f);
+				FindObjectOfType<AudioManager>().PlaySFX("Player");
+				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
 			}
 		}
 	}
@@ -58,10 +62,12 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
+			emission.enabled = false;
 			_rigidbody.AddForce(Vector2.down * 150f);
 			_rigidbody.AddTorque(30f);
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
 			{
+				FindObjectOfType<AudioManager>().PlaySFX("Dead");
 				_rigidbody.freezeRotation = true;
 				StartCoroutine(FreezeTime());
 			}
