@@ -14,7 +14,6 @@ public class BackgroundSong
 	public float pitch;
 
 	public bool loop = false;
-	public bool playOnAwake = true;
 	public bool mute = false;
 
 	[HideInInspector]

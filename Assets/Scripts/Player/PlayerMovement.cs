@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
 	[SerializeField] private ParticleSystem ps;
 	private ParticleSystem.EmissionModule emission;
+	[SerializeField] private ParticleSystem flame;
+	private ParticleSystem.EmissionModule flameEmission;
 
 	public static PlayerMovement instance;
 
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 		_rigidbody = GetComponent<Rigidbody2D>();
 		gravity = _rigidbody.gravityScale;
 		emission = ps.emission;
+		flameEmission = flame.emission;
 		Time.timeScale = 0;
 	}
 
@@ -30,12 +33,17 @@ public class PlayerMovement : MonoBehaviour
 		// rotation towards velocity direction:
 		Vector2 velocity = _rigidbody.velocity;
 		float angle = Mathf.Atan2(velocity.y, 10) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 88));
 
-		if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+		if(Input.GetKey(KeyCode.Space))
 		{
-			FindObjectOfType<AudioManager>().PlaySFX("Player");
+			FindObjectOfType<AudioManager>().PlaySFX("Fuel");
+			flameEmission.enabled = true;
 			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
+		} else if (Input.GetKeyUp(KeyCode.Space))
+		{
+			FindObjectOfType<AudioManager>().StopSFX("Fuel");
+			flameEmission.enabled = false;
 		}
 
 		if (Input.touchCount > 0)
@@ -43,8 +51,13 @@ public class PlayerMovement : MonoBehaviour
 			_touch = Input.GetTouch(0);
 			if (_touch.phase == TouchPhase.Began)
 			{
-				FindObjectOfType<AudioManager>().PlaySFX("Player");
+				FindObjectOfType<AudioManager>().PlaySFX("Fuel");
+				flameEmission.enabled = true;
 				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
+			} else if (_touch.phase == TouchPhase.Ended)
+			{
+				FindObjectOfType<AudioManager>().StopSFX("Fuel");
+				flameEmission.enabled = false;
 			}
 		}
 	}
@@ -68,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
 			{
 				FindObjectOfType<AudioManager>().PlaySFX("Dead");
+				emission.enabled = false;
+				flameEmission.enabled = false;
 				_rigidbody.freezeRotation = true;
 				StartCoroutine(FreezeTime());
 			}
