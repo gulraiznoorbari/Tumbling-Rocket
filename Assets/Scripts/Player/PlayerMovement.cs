@@ -8,11 +8,13 @@ public class PlayerMovement : MonoBehaviour
 	[HideInInspector] public bool dead;
 	private float gravity;
 	[SerializeField] private GameObject _gameOverMenu;
+	[SerializeField] private GameObject _playerNose;
 
 	[SerializeField] private ParticleSystem ps;
 	private ParticleSystem.EmissionModule emission;
 	[SerializeField] private ParticleSystem flame;
 	private ParticleSystem.EmissionModule flameEmission;
+	[SerializeField] private ParticleSystem death;
 
 	public static PlayerMovement instance;
 
@@ -62,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	private void DeathEffect()
+	{
+		Instantiate(death, _playerNose.transform.position, Quaternion.identity);
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.gameObject.CompareTag("ScoreDetector"))
@@ -75,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
+			DeathEffect();
 			emission.enabled = false;
 			_rigidbody.AddForce(Vector2.down * 150f);
 			_rigidbody.AddTorque(30f);
