@@ -82,13 +82,13 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
+			FindObjectOfType<AudioManager>().PlaySFX("Dead");
 			DeathEffect();
 			emission.enabled = false;
 			_rigidbody.AddForce(Vector2.down * 150f);
 			_rigidbody.AddTorque(30f);
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
 			{
-				FindObjectOfType<AudioManager>().PlaySFX("Dead");
 				emission.enabled = false;
 				flameEmission.enabled = false;
 				_rigidbody.freezeRotation = true;

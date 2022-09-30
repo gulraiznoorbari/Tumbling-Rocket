@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
 
 	public SoundEffects[] _soundEffects;
 	public BackgroundSong _backgroundSong;
-	public bool _muted;
+	public bool _muted = false;
 
 	private void Awake()
 	{
@@ -58,11 +58,7 @@ public class AudioManager : MonoBehaviour
 		}
 
 		s.source.Play();
-	}
-
-	public void PlayBGSong()
-	{
-		_backgroundSong.source.Play();
+		_muted = false;
 	}
 
 	public void StopSFX(string name)
@@ -78,6 +74,12 @@ public class AudioManager : MonoBehaviour
 		s.source.Stop();
 	}
 
+	public void PlayBGSong()
+	{
+		_backgroundSong.source.Play();
+		_muted = false;
+	}
+
 	public void StopBGSong()
 	{
 		_backgroundSong.source.Stop();
@@ -90,11 +92,13 @@ public class AudioManager : MonoBehaviour
 			s.source.mute = !s.source.mute;
 			s.mute = s.source.mute;
 		}
+		_muted = true;
 	}
 
 	public void ToggleBGSong()
 	{
 		_backgroundSong.source.mute = !_backgroundSong.source.mute;
 		_backgroundSong.mute = _backgroundSong.source.mute;
+		_muted = true;
 	}
 }
