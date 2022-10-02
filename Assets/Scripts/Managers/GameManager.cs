@@ -4,17 +4,21 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 	private GameObject _startPipe;
+	private PlayerSave data;
 	private float _timer = 0;
+	private int _score;
+	private static int _highScore;
 
 	[SerializeField] private GameObject _pipe;
+	[SerializeField] private SaveManager _saveManager;
 	[SerializeField] private TextMeshProUGUI _scoreText;
 	[SerializeField] private TextMeshProUGUI _levelScoreText;
+	[SerializeField] private TextMeshProUGUI _highScoreText;
 	[SerializeField] private float _startOffset;
 	[SerializeField] private float _maxTime = 1f;
 	[SerializeField] private float _minheight;
 	[SerializeField] private float _maxheight;
 	[SerializeField] private Animator _scoreAnimator;
-	[HideInInspector] public int _score;
 
 	private int ScoreAnimatorKey;
 
@@ -62,6 +66,18 @@ public class GameManager : MonoBehaviour
 	public void GetScore()
 	{
 		_levelScoreText.SetText(_score.ToString());
+
+		if (_score > _highScore)
+		{
+			_highScore = _score;
+			_highScoreText.SetText(_highScore.ToString());
+			_saveManager.Save();
+		}
+		if (_score <= _highScore)
+		{
+			_highScoreText.SetText(_highScore.ToString());
+			_saveManager.Save();
+		}
 	}
 
 	public void PauseGame()

@@ -5,8 +5,10 @@ public class PlayerMovement : MonoBehaviour
 {
 	private Touch _touch;
 	private Rigidbody2D _rigidbody;
+	private GameManager _gameManager;
 	[HideInInspector] public bool dead;
 	private float gravity;
+	private PlayerSave data;
 	[SerializeField] private GameObject _gameOverMenu;
 	[SerializeField] private GameObject _playerNose;
 
@@ -22,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		instance = this;
 		_rigidbody = GetComponent<Rigidbody2D>();
+		_gameManager = FindObjectOfType<GameManager>();
 		gravity = _rigidbody.gravityScale;
 		emission = ps.emission;
 		flameEmission = flame.emission;
@@ -103,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
 		_rigidbody.freezeRotation = false;
 		Time.timeScale = 0;
 		dead = false;
-		FindObjectOfType<GameManager>().GetScore();
+		_gameManager.GetScore();
 		_gameOverMenu.SetActive(true);
 	}
 }
