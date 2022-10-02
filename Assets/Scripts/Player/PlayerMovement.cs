@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
 	private GameManager _gameManager;
 	[HideInInspector] public bool dead;
 	private float gravity;
-	private PlayerSave data;
 	[SerializeField] private GameObject _gameOverMenu;
 	[SerializeField] private GameObject _playerNose;
 
@@ -40,12 +39,13 @@ public class PlayerMovement : MonoBehaviour
 		float angle = Mathf.Atan2(velocity.y, 10) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 88));
 
-		if(Input.GetKey(KeyCode.Space))
+		if (Input.GetKey(KeyCode.Space))
 		{
 			FindObjectOfType<AudioManager>().PlaySFX("Fuel");
 			flameEmission.enabled = true;
 			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
-		} else if (Input.GetKeyUp(KeyCode.Space))
+		}
+		else if (Input.GetKeyUp(KeyCode.Space))
 		{
 			FindObjectOfType<AudioManager>().StopSFX("Fuel");
 			flameEmission.enabled = false;
@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (collision.gameObject.CompareTag("ScoreDetector"))
 		{
-			FindObjectOfType<GameManager>().IncreaseScore();
+			_gameManager.IncreaseScore();
 		}
 	}
 
@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 			FindObjectOfType<AudioManager>().PlaySFX("Dead");
 			DeathEffect();
 			emission.enabled = false;
-			_rigidbody.AddForce(Vector2.down * 150f);
+			_rigidbody.AddForce(Vector2.down * 120f);
 			_rigidbody.AddTorque(30f);
 			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
 			{

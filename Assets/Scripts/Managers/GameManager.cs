@@ -4,12 +4,13 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 	private GameObject _startPipe;
-	private PlayerSave data;
 	private float _timer = 0;
 	private int _score;
+	private bool _isToTheLeftOfPlayer;
 	private static int _highScore;
 
 	[SerializeField] private GameObject _pipe;
+	[SerializeField] private Transform _playerPosition;
 	[SerializeField] private SaveManager _saveManager;
 	[SerializeField] private TextMeshProUGUI _scoreText;
 	[SerializeField] private TextMeshProUGUI _levelScoreText;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Application.targetFrameRate = 60;
+		_isToTheLeftOfPlayer = _pipe.transform.position.x > _playerPosition.position.x;
 		ScoreAnimatorKey = Animator.StringToHash("score");
 		_score = 0;
 		_scoreText.SetText(_score.ToString());
@@ -57,10 +59,13 @@ public class GameManager : MonoBehaviour
 
 	public void IncreaseScore()
 	{
-		FindObjectOfType<AudioManager>().PlaySFX("Score");
-		_scoreAnimator.SetTrigger(ScoreAnimatorKey);
-		_score++;
-		_scoreText.SetText(_score.ToString());
+		if (_isToTheLeftOfPlayer)
+		{
+			FindObjectOfType<AudioManager>().PlaySFX("Score");
+			_scoreAnimator.SetTrigger(ScoreAnimatorKey);
+			_score++;
+			_scoreText.SetText(_score.ToString());
+		}
 	}
 
 	public void GetScore()
