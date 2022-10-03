@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 		Time.timeScale = 0;
 	}
 
-	private void Update()
+	private void FixedUpdate()
 	{
 		if (dead) return;
 
@@ -39,31 +39,34 @@ public class PlayerMovement : MonoBehaviour
 		float angle = Mathf.Atan2(velocity.y, 10) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 88));
 
+		// Touch Controls:
+		if (Input.touchCount > 0)
+		{
+			_touch = Input.GetTouch(0);
+			if (_touch.phase == TouchPhase.Began || _touch.phase == TouchPhase.Stationary)
+			{
+				FindObjectOfType<AudioManager>().PlaySFX("Fuel");
+				flameEmission.enabled = true;
+				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1250f);
+			}
+			else if (_touch.phase == TouchPhase.Ended)
+			{
+				FindObjectOfType<AudioManager>().StopSFX("Fuel");
+				flameEmission.enabled = false;
+			}
+		}
+
+		// Keyboard Controls:
 		if (Input.GetKey(KeyCode.Space))
 		{
 			FindObjectOfType<AudioManager>().PlaySFX("Fuel");
 			flameEmission.enabled = true;
-			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
+			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1250f);
 		}
 		else if (Input.GetKeyUp(KeyCode.Space))
 		{
 			FindObjectOfType<AudioManager>().StopSFX("Fuel");
 			flameEmission.enabled = false;
-		}
-
-		if (Input.touchCount > 0)
-		{
-			_touch = Input.GetTouch(0);
-			if (_touch.phase == TouchPhase.Began)
-			{
-				FindObjectOfType<AudioManager>().PlaySFX("Fuel");
-				flameEmission.enabled = true;
-				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1300f);
-			} else if (_touch.phase == TouchPhase.Ended)
-			{
-				FindObjectOfType<AudioManager>().StopSFX("Fuel");
-				flameEmission.enabled = false;
-			}
 		}
 	}
 

@@ -6,16 +6,20 @@ public class UIManager : MonoBehaviour
 	private bool _playerDead;
 
 	[SerializeField] private GameObject _mainMenu;
+	[SerializeField] private ParticleSystem flame;
+	private ParticleSystem.EmissionModule flameEmission;
 
 	private void Awake()
 	{
 		_playerDead = FindObjectOfType<PlayerMovement>().dead;
+		flameEmission = flame.emission;
 	}
 
 	public void PlayGame()
 	{
 		_playerDead = false;
 		_mainMenu.SetActive(false);
+		flameEmission.enabled = false;
 		Time.timeScale = 1f;
 	}
 

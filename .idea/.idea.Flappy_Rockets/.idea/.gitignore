@@ -1,0 +1,11 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/.idea.Flappy_Rockets.iml
+/projectSettingsUpdater.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\hp\OneDrive\Desktop\Flappy_Rockets\.idea\.idea.Flappy_Rockets\.idea/dataSources/
+/dataSources.local.xml
