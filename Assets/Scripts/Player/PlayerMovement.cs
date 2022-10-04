@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
 			{
 				FindObjectOfType<AudioManager>().PlaySFX("Fuel");
 				flameEmission.enabled = true;
-				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1250f);
+				_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1200f);
 			}
 			else if (_touch.phase == TouchPhase.Ended)
 			{
@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			FindObjectOfType<AudioManager>().PlaySFX("Fuel");
 			flameEmission.enabled = true;
-			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1250f);
+			_rigidbody.AddForce(Vector2.up * gravity * Time.deltaTime * 1200f);
 		}
 		else if (Input.GetKeyUp(KeyCode.Space))
 		{

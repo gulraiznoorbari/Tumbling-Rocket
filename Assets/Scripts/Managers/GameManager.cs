@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		FindObjectOfType<AudioManager>().PlayBGSong();
-		transform.position = new Vector3(transform.position.x + 1 , transform.position.y, 0);
+		transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 		_startPipe = Instantiate(_pipe, transform.position, Quaternion.identity);
 	}
 
