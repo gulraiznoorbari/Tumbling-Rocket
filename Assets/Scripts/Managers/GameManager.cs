@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField] private GameObject _pipe;
 	[SerializeField] private Transform _playerPosition;
-	[SerializeField] private SaveManager _saveManager;
 	[SerializeField] private TextMeshProUGUI _scoreText;
 	[SerializeField] private TextMeshProUGUI _levelScoreText;
 	[SerializeField] private TextMeshProUGUI _highScoreText;
@@ -25,7 +24,6 @@ public class GameManager : MonoBehaviour
 
 	private void Awake()
 	{
-		Application.targetFrameRate = 60;
 		_isToTheLeftOfPlayer = _pipe.transform.position.x > _playerPosition.position.x;
 		ScoreAnimatorKey = Animator.StringToHash("score");
 		_score = 0;
@@ -35,6 +33,8 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
+		Application.targetFrameRate = 60;
+		GetHighScore();
 		FindObjectOfType<AudioManager>().PlayBGSong();
 		transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 		_startPipe = Instantiate(_pipe, transform.position, Quaternion.identity);
@@ -76,13 +76,22 @@ public class GameManager : MonoBehaviour
 		{
 			_highScore = _score;
 			_highScoreText.SetText(_highScore.ToString());
-			_saveManager.Save();
+			SaveHighScore();
 		}
 		if (_score <= _highScore)
 		{
 			_highScoreText.SetText(_highScore.ToString());
-			_saveManager.Save();
 		}
+	}
+
+	private void SaveHighScore()
+	{
+		PlayerPrefs.SetInt("highscore", _highScore);
+	}
+
+	private void GetHighScore()
+	{
+		_highScore = PlayerPrefs.GetInt("highscore");
 	}
 
 	public void PauseGame()

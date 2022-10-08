@@ -900,7 +900,7 @@ Transform:
   m_GameObject: {fileID: 195689959}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -5, y: 0, z: 0}
-  m_LocalScale: {x: 4.5, y: 4.5, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children:
   - {fileID: 1815282370}
   - {fileID: 1035569476}
@@ -946,10 +946,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1.1
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.5
-  m_GravityScale: 1.3
+  m_AngularDrag: 0.05
+  m_GravityScale: 1.4
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -7400,7 +7400,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pipe: {fileID: 7404039686690813709, guid: 7b6f0c07529097a418aeeabbbe2e9429, type: 3}
   _playerPosition: {fileID: 195689961}
-  _saveManager: {fileID: 172538224}
   _scoreText: {fileID: 1892609341}
   _levelScoreText: {fileID: 1312310559}
   _highScoreText: {fileID: 60864274}
