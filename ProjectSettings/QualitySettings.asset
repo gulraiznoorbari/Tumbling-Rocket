@@ -122,9 +122,9 @@ QualitySettings:
     - Android
   - serializedVersion: 2
     name: High
-    pixelLightCount: 4
+    pixelLightCount: 3
     shadows: 0
-    shadowResolution: 1
+    shadowResolution: 0
     shadowProjection: 1
     shadowCascades: 2
     shadowDistance: 40

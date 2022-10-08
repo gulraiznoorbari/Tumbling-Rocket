@@ -6,8 +6,9 @@ public class PlayerMovement : MonoBehaviour
 	private Touch _touch;
 	private Rigidbody2D _rigidbody;
 	private GameManager _gameManager;
-	[HideInInspector] public bool dead;
 	private float gravity;
+	private bool _alreadyPlayed = false;
+	[HideInInspector] public bool dead;
 	[SerializeField] private GameObject _gameOverMenu;
 	[SerializeField] private GameObject _playerNose;
 
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Awake()
 	{
+		Application.targetFrameRate = 60;
 		instance = this;
 		_rigidbody = GetComponent<Rigidbody2D>();
 		_gameManager = FindObjectOfType<GameManager>();
@@ -88,25 +90,25 @@ public class PlayerMovement : MonoBehaviour
 		if (other.gameObject.layer == LayerMask.NameToLayer("Obstruction"))
 		{
 			dead = true;
-			FindObjectOfType<AudioManager>().PlaySFX("Dead");
+			FindObjectOfType<AudioManager>().StopSFX("Fuel");
 			DeathEffect();
-			emission.enabled = false;
-			_rigidbody.AddForce(Vector2.down * 120f);
-			_rigidbody.AddTorque(30f);
-			if (other.gameObject.CompareTag("Lower Obstacle") || other.gameObject.CompareTag("Ground"))
+			if (!_alreadyPlayed)
 			{
-				emission.enabled = false;
-				flameEmission.enabled = false;
-				_rigidbody.freezeRotation = true;
-				StartCoroutine(FreezeTime());
+				FindObjectOfType<AudioManager>().PlaySFX("Dead");
+				_alreadyPlayed = true;
 			}
+			emission.enabled = false;
+			flameEmission.enabled = false;
+			_rigidbody.AddForce(Vector2.down * 130f);
+			_rigidbody.AddTorque(30f);
+			StartCoroutine(FreezeTime());
 		}
 	}
 	private IEnumerator FreezeTime()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(1.5f);
 		_rigidbody.velocity = Vector2.zero;
-		_rigidbody.freezeRotation = false;
+		_rigidbody.freezeRotation = true;
 		Time.timeScale = 0;
 		dead = false;
 		_gameManager.GetScore();

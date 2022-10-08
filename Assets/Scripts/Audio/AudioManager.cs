@@ -57,7 +57,7 @@ public class AudioManager : MonoBehaviour
 			return;
 		}
 
-		s.source.Play();
+		s.source.PlayOneShot(s.source.clip);
 		_muted = false;
 	}
 

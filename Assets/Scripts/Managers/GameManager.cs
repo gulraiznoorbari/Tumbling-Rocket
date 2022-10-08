@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
 	private void Awake()
 	{
+		Application.targetFrameRate = 60;
 		_isToTheLeftOfPlayer = _pipe.transform.position.x > _playerPosition.position.x;
 		ScoreAnimatorKey = Animator.StringToHash("score");
 		_score = 0;
@@ -33,7 +34,6 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
-		Application.targetFrameRate = 60;
 		GetHighScore();
 		FindObjectOfType<AudioManager>().PlayBGSong();
 		transform.position = new Vector3(transform.position.x, transform.position.y, 0);
