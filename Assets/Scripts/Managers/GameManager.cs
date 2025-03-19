@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour, IGameManager
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 120;
         ScoreAnimatorKey = Animator.StringToHash("score");
         _score = 0;
         Time.timeScale = 0f;

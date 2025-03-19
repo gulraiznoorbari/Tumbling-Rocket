@@ -23,7 +23,6 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
 
     private void Awake()
     {
-        Application.targetFrameRate = 120;
         _rigidbody = GetComponent<Rigidbody2D>();
         _gravity = _rigidbody.gravityScale;
         _smokeEmission = _smoke.emission;
