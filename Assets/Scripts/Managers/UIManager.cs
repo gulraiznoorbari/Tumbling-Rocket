@@ -1,44 +1,112 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour, IUIManager
 {
-	private bool _playerDead;
-
-	[SerializeField] private GameObject _mainMenu;
 	[SerializeField] private ParticleSystem flame;
+	[Header("Game State")] 
+	[SerializeField] private GameObject _gameStatePanel;
+	[SerializeField] private Button _pauseButton;
+	[SerializeField] private Button _resumeButton;
+	[SerializeField] private GameObject _background;
+	[Header("Game Over Menu")] 
+	[SerializeField] private GameObject _gameOverMenuPanel;
+	[SerializeField] private Button _mainMenuButton;
+	[SerializeField] private Button _retryButton;
+	[Header("Main Menu")]
+	[SerializeField] private GameObject _mainMenu;
+	[SerializeField] private GameObject _settingsMenu;
+	[SerializeField] private Button _playButton;
+	[SerializeField] private Button _exitButton;
+	[SerializeField] private Button _settingsButton;
+	
 	private ParticleSystem.EmissionModule flameEmission;
+	public IGameManager GameHandler { get; set; }
 
 	private void Awake()
 	{
-		_playerDead = FindObjectOfType<PlayerMovement>().dead;
 		flameEmission = flame.emission;
 	}
 
-	public void PlayGame()
+	private void OnEnable()
 	{
-		_playerDead = false;
+		_playButton.onClick.AddListener(PlayGame);
+		_settingsButton.onClick.AddListener(EnableSettingsMenu);
+		_exitButton.onClick.AddListener(QuitGame);
+		_mainMenuButton.onClick.AddListener(EnableMainMenu);
+		_retryButton.onClick.AddListener(RetryGame);
+		_pauseButton.onClick.AddListener(EnablePause);
+		_resumeButton.onClick.AddListener(EnableResume);
+	}
+
+	private void OnDisable()
+	{
+		_playButton.onClick.RemoveListener(PlayGame);
+		_settingsButton.onClick.RemoveListener(EnableSettingsMenu);
+		_exitButton.onClick.RemoveListener(QuitGame);
+		_mainMenuButton.onClick.RemoveListener(EnableMainMenu);
+		_retryButton.onClick.RemoveListener(RetryGame);
+		_pauseButton.onClick.RemoveListener(EnablePause);
+		_resumeButton.onClick.RemoveListener(EnableResume);
+	}
+
+	private void PlayGame()
+	{
+		GameHandler.SetGameOver(false);
 		_mainMenu.SetActive(false);
 		flameEmission.enabled = false;
 		Time.timeScale = 1f;
+		_gameStatePanel.SetActive(true);
 	}
 
-	public void RetryGame()
+	private void EnableSettingsMenu()
 	{
-		_playerDead = false;
 		_mainMenu.SetActive(false);
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		_gameStatePanel.SetActive(false);
+		_settingsMenu.SetActive(true);
+	}
+
+	private void RetryGame()
+	{
+		GameHandler.SetGameOver(false);
+		_mainMenu.SetActive(false);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		_gameStatePanel.SetActive(true);
 		Time.timeScale = 1f;
 	}
 
-	public void MainMenu()
+	private void EnableMainMenu()
 	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-		Time.timeScale = 0;
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		Time.timeScale = 0f;
 		_mainMenu.SetActive(true);
+		_gameStatePanel.SetActive(false);
 	}
 
-	public void QuitGame()
+	private void EnablePause()
+	{
+		GameHandler.PauseGame();
+		_pauseButton.gameObject.SetActive(false);
+		_resumeButton.gameObject.SetActive(true);
+		_background.SetActive(true);
+	}
+
+	private void EnableResume()
+	{
+		GameHandler.ResumeGame();
+		_pauseButton.gameObject.SetActive(true);
+		_resumeButton.gameObject.SetActive(false);
+		_background.SetActive(false);
+	}
+
+	public void EnableGameOverMenu()
+	{
+		_gameOverMenuPanel.SetActive(true);
+		_gameStatePanel.SetActive(false);
+	}
+
+	private void QuitGame()
 	{
 		Application.Quit();
 	}

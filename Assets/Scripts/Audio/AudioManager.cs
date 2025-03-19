@@ -1,104 +1,94 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : MonoBehaviour, IAudioManager
 {
-	public static AudioManager instance;
+    [SerializeField] private SoundEffects[] _soundEffects;
+    [SerializeField] private BackgroundSong _backgroundSong;
+    [SerializeField] private bool _muted = false;
 
-	public SoundEffects[] _soundEffects;
-	public BackgroundSong _backgroundSong;
-	public bool _muted = false;
+    private Dictionary<string, SoundEffects> _soundEffectsDict;
 
-	private void Awake()
-	{
-		if (instance == null)
-		{
-			instance = this;
-		}
-		else
-		{
-			Destroy(gameObject);
-			return;
-		}
+    private void Awake()
+    {
+        InitializeAudioSources();
+    }
 
-		DontDestroyOnLoad(gameObject);
+    private void InitializeAudioSources()
+    {
+        if (_backgroundSong != null && _backgroundSong.clip != null)
+        {
+            _backgroundSong.source = gameObject.AddComponent<AudioSource>();
+            _backgroundSong.source.clip = _backgroundSong.clip;
+            _backgroundSong.source.loop = _backgroundSong.loop;
+            _backgroundSong.source.volume = _backgroundSong.volume;
+            _backgroundSong.source.pitch = _backgroundSong.pitch;
+        }
 
-		_backgroundSong.source = gameObject.AddComponent<AudioSource>();
-		_backgroundSong.source.clip = _backgroundSong.clip;
-		_backgroundSong.source.loop = _backgroundSong.loop;
+        _soundEffectsDict = new Dictionary<string, SoundEffects>();
 
-		foreach (SoundEffects s in _soundEffects)
-		{
-			s.source = gameObject.AddComponent<AudioSource>();
-			s.source.clip = s.clip;
-			s.source.loop = s.loop;
-		}
-	}
+        foreach (var soundEffect in _soundEffects)
+        {
+            if (soundEffect.clip == null) continue;
 
-	private void Update()
-	{
-		foreach (SoundEffects s in _soundEffects)
-		{
-			s.source.volume = s.volume;
-			s.source.pitch = s.pitch;
-			s.source.mute = s.mute;
-		}
-		_backgroundSong.source.volume = _backgroundSong.volume;
-		_backgroundSong.source.pitch = _backgroundSong.pitch;
-	}
+            soundEffect.source = gameObject.AddComponent<AudioSource>();
+            soundEffect.source.clip = soundEffect.clip;
+            soundEffect.source.loop = soundEffect.loop;
+            soundEffect.source.volume = soundEffect.volume;
+            soundEffect.source.pitch = soundEffect.pitch;
+            soundEffect.source.mute = soundEffect.mute;
 
-	public void PlaySFX(string name)
-	{
-		SoundEffects s = Array.Find(_soundEffects, sound => sound.name == name);
+            _soundEffectsDict[soundEffect.name] = soundEffect;
+        }
+    }
 
-		if (s == null)
-		{
-			Debug.LogWarning("Sound: " + name + " not found!");
-			return;
-		}
+    public void PlaySFX(string name)
+    {
+        if (_soundEffectsDict.TryGetValue(name, out SoundEffects s))
+        {
+            s.source.PlayOneShot(s.source.clip);
+            _muted = false;
+        }
+    }
 
-		s.source.PlayOneShot(s.source.clip);
-		_muted = false;
-	}
+    public void StopSFX(string name)
+    {
+        if (_soundEffectsDict.TryGetValue(name, out SoundEffects s))
+        {
+            s.source.Stop();
+        }
+    }
 
-	public void StopSFX(string name)
-	{
-		SoundEffects s = Array.Find(_soundEffects, sound => sound.name == name);
+    public void PlayBGSong()
+    {
+        if (_backgroundSong?.source != null)
+        {
+            _backgroundSong.source.Play();
+            _muted = false;
+        }
+    }
 
-		if (s == null)
-		{
-			Debug.LogWarning("Sound: " + name + " not found!");
-			return;
-		}
+    public void StopBGSong()
+    {
+        _backgroundSong?.source?.Stop();
+    }
 
-		s.source.Stop();
-	}
+    public void ToggleSFX()
+    {
+        _muted = !_muted;
 
-	public void PlayBGSong()
-	{
-		_backgroundSong.source.Play();
-		_muted = false;
-	}
+        foreach (var s in _soundEffectsDict.Values)
+        {
+            s.source.mute = _muted;
+        }
+    }
 
-	public void StopBGSong()
-	{
-		_backgroundSong.source.Stop();
-	}
-
-	public void ToggleSFX()
-	{
-		foreach (SoundEffects s in _soundEffects)
-		{
-			s.source.mute = !s.source.mute;
-			s.mute = s.source.mute;
-		}
-		_muted = true;
-	}
-
-	public void ToggleBGSong()
-	{
-		_backgroundSong.source.mute = !_backgroundSong.source.mute;
-		_backgroundSong.mute = _backgroundSong.source.mute;
-		_muted = true;
-	}
+    public void ToggleBGSong()
+    {
+        if (_backgroundSong?.source != null)
+        {
+            _muted = !_muted;
+            _backgroundSong.source.mute = _muted;
+        }
+    }
 }

@@ -2,22 +2,30 @@
 
 public class Pipe : MonoBehaviour
 {
-	[SerializeField] private float _speed;
-	private float leftEdge;
+    [SerializeField] private float _speed;
+    
+    private float _leftEdge;
+    private PipePool _pipePool;
 
-	private void Start()
-	{
-		leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 8f;
-	}
-
-	// Update is called once per frame
-	private void Update()
+    private void Start()
     {
-		transform.position += Vector3.left * _speed * Time.deltaTime;
+        _leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 8f;
+    }
 
-		if (transform.position.x < leftEdge)
-		{
-			Destroy(gameObject);
-		}
-	}
+    private void Update()
+    {
+        if (!_pipePool) return; 
+        
+        transform.position += Vector3.left * (_speed * Time.deltaTime);
+        if (transform.position.x < _leftEdge)
+        {
+            _pipePool.ReturnPipe(this);
+        }
+    }
+    
+    public void SetPool(PipePool pool)
+    {
+        _pipePool = pool;
+    }
+    
 }
