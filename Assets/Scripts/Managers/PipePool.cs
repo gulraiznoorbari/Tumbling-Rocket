@@ -31,12 +31,14 @@ public class PipePool : MonoBehaviour, IPipePoolHandler
         {
             var pipe = _pipePool.Dequeue();
             pipe.gameObject.SetActive(true);
+            pipe.SetPool(this);
             _mostRecentPipe = pipe;
             return pipe;
         }
         else
         {
             var pipe = Instantiate(_pipePrefab, transform);
+            pipe.SetPool(this);
             _mostRecentPipe = pipe;
             return pipe;
         }

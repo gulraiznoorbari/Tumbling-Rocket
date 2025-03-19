@@ -115,6 +115,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
         _rigidbody.velocity = Vector2.zero;
         _rigidbody.freezeRotation = true;
         Time.timeScale = 0f;
+        GameHandler.SaveGameState();
         UIHandler.EnableGameOverMenu();
     }
 

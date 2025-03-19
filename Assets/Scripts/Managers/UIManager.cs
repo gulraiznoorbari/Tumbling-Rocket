@@ -102,6 +102,7 @@ public class UIManager : MonoBehaviour, IUIManager
 
 	public void EnableGameOverMenu()
 	{
+		GameHandler.GetScore();
 		_gameOverMenuPanel.SetActive(true);
 		_gameStatePanel.SetActive(false);
 	}
