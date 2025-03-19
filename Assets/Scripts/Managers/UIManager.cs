@@ -56,8 +56,7 @@ public class UIManager : MonoBehaviour, IUIManager
 		GameHandler.SetGameOver(false);
 		_mainMenu.SetActive(false);
 		flameEmission.enabled = false;
-		Time.timeScale = 1f;
-		_gameStatePanel.SetActive(true);
+		GameHandler.ResumeGame();
 	}
 
 	private void EnableSettingsMenu()
