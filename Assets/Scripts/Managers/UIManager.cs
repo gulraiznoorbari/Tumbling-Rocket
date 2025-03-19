@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CrazyGames;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -54,6 +55,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	private void PlayGame()
 	{
 		GameHandler.SetGameOver(false);
+		CrazySDK.Game.GameplayStart();
 		_mainMenu.SetActive(false);
 		flameEmission.enabled = false;
 		Time.timeScale = 1f;
@@ -89,6 +91,7 @@ public class UIManager : MonoBehaviour, IUIManager
 		GameHandler.PauseGame();
 		_pauseButton.gameObject.SetActive(false);
 		_resumeButton.gameObject.SetActive(true);
+		CrazySDK.Game.GameplayStop();
 		_background.SetActive(true);
 	}
 
@@ -97,6 +100,7 @@ public class UIManager : MonoBehaviour, IUIManager
 		GameHandler.ResumeGame();
 		_pauseButton.gameObject.SetActive(true);
 		_resumeButton.gameObject.SetActive(false);
+		CrazySDK.Game.GameplayStart();
 		_background.SetActive(false);
 	}
 
