@@ -4,11 +4,12 @@ using TMPro;
 
 public class GameManager : MonoBehaviour, IGameManager
 {
-    private float _timer = 0f;
-    private int _score;
     private bool _isToTheLeftOfPlayer;
-    private static int _highScore;
     private bool _isGameOver = false;
+    private int _score;
+    private int _highScore;
+    private int ScoreAnimatorKey;
+    private float _timer = 0f;
 
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private TextMeshProUGUI _scoreText;
@@ -19,8 +20,7 @@ public class GameManager : MonoBehaviour, IGameManager
     [SerializeField] private float _minheight;
     [SerializeField] private float _maxheight;
     [SerializeField] private Animator _scoreAnimator;
-
-    private int ScoreAnimatorKey;
+    
     public IAudioManager AudioHandler { get; set; }
     public ISaveManager SaveHandler { get; set; }
     public IPlayerHandler PlayerHandler { get; set; }
