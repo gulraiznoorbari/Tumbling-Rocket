@@ -77,6 +77,15 @@ public class UIManager : MonoBehaviour, IUIManager
 		Time.timeScale = 1f;
 	}
 
+	private void ContinueGameOnAd()
+	{
+		// GameHandler.SetGameOver(false);
+		// _mainMenu.SetActive(false);
+		CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, null, null, GameHandler.LoadGameState);
+		// _gameStatePanel.SetActive(true);
+		// Time.timeScale = 1f;
+	}
+
 	private void EnableMainMenu()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -116,6 +116,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
         _rigidbody.freezeRotation = true;
         Time.timeScale = 0f;
         GameHandler.SaveGameState();
+        CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, null, null, null);
         CrazySDK.Game.GameplayStop();
         UIHandler.EnableGameOverMenu();
     }
