@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	
 	private ParticleSystem.EmissionModule flameEmission;
 	public IGameManager GameHandler { get; set; }
+	public IGameDistributionAdsHandler GameDistributionAdsHandler { get; set; }
 
 	private void Awake()
 	{
@@ -73,6 +74,11 @@ public class UIManager : MonoBehaviour, IUIManager
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		_gameStatePanel.SetActive(true);
 		Time.timeScale = 1f;
+	}
+
+	private void ContinueWithAd()
+	{
+		GameDistributionAdsHandler.ShowRewardedAd();
 	}
 
 	private void EnableMainMenu()

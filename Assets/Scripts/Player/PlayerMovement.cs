@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
     public IAudioManager AudioHandler { get; set; }
     public IGameManager GameHandler { get; set; }
     public IUIManager UIHandler { get; set; }
+    public IGameDistributionAdsHandler GameDistributionAdsHandler { get; set; }
 
     private void Awake()
     {
@@ -115,6 +116,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
         _rigidbody.freezeRotation = true;
         Time.timeScale = 0f;
         GameHandler.SaveGameState();
+        GameDistributionAdsHandler.ShowAd();
         UIHandler.EnableGameOverMenu();
     }
 
