@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	{
 		// GameHandler.SetGameOver(false);
 		// _mainMenu.SetActive(false);
-		CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, null, null, GameHandler.LoadGameState);
+		CrazyAdsManager.Instance.ShowRewardedAd(GameHandler.LoadGameState);
 		// _gameStatePanel.SetActive(true);
 		// Time.timeScale = 1f;
 	}
