@@ -18,8 +18,10 @@ public class UIManager : MonoBehaviour, IUIManager
 	[SerializeField] private GameObject _mainMenu;
 	[SerializeField] private GameObject _settingsMenu;
 	[SerializeField] private Button _playButton;
-	[SerializeField] private Button _exitButton;
+	[SerializeField] private Button _inventoryButton;
 	[SerializeField] private Button _settingsButton;
+	[Header("Inventory")] 
+	[SerializeField] private GameObject _inventoryMenuPanel;
 	
 	private ParticleSystem.EmissionModule flameEmission;
 	public IGameManager GameHandler { get; set; }
@@ -33,7 +35,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	{
 		_playButton.onClick.AddListener(PlayGame);
 		_settingsButton.onClick.AddListener(EnableSettingsMenu);
-		_exitButton.onClick.AddListener(QuitGame);
+		_inventoryButton.onClick.AddListener(EnableInventoryMenu);
 		_mainMenuButton.onClick.AddListener(EnableMainMenu);
 		_retryButton.onClick.AddListener(RetryGame);
 		_pauseButton.onClick.AddListener(EnablePause);
@@ -44,7 +46,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	{
 		_playButton.onClick.RemoveListener(PlayGame);
 		_settingsButton.onClick.RemoveListener(EnableSettingsMenu);
-		_exitButton.onClick.RemoveListener(QuitGame);
+		_inventoryButton.onClick.RemoveListener(EnableInventoryMenu);
 		_mainMenuButton.onClick.RemoveListener(EnableMainMenu);
 		_retryButton.onClick.RemoveListener(RetryGame);
 		_pauseButton.onClick.RemoveListener(EnablePause);
@@ -106,8 +108,8 @@ public class UIManager : MonoBehaviour, IUIManager
 		_gameStatePanel.SetActive(false);
 	}
 
-	private void QuitGame()
+	private void EnableInventoryMenu()
 	{
-		Application.Quit();
+		_inventoryMenuPanel.SetActive(true);
 	}
 }

@@ -5,32 +5,48 @@ using UnityEngine;
 [Serializable]
 public class PlayerSave
 {
-    private int currentScore;
-    private Vector2 playerPosition;
-    private List<Vector2> pipesPositions;
+    private int _currentScore;
+    private Vector2 _playerPosition;
+    private List<Vector2> _pipesPositions;
+    private HashSet<int> _ownedRockets;
+    private int _equippedRocket;
 
     public PlayerSave()
     {
-        currentScore = 0;
-        playerPosition = Vector2.zero;
-        pipesPositions = new List<Vector2>();
+        _currentScore = 0;
+        _playerPosition = Vector2.zero;
+        _pipesPositions = new List<Vector2>();
+        _ownedRockets = new HashSet<int>();
+        _equippedRocket = 0;
     }
 
     public int CurrentScore
     {
-        get => currentScore;
-        set => currentScore = value;
+        get => _currentScore;
+        set => _currentScore = value;
     }
 
     public Vector2 PlayerPosition
     {
-        get => playerPosition;
-        set => playerPosition = value;
+        get => _playerPosition;
+        set => _playerPosition = value;
     }
 
     public List<Vector2> PipesPositions
     {
-        get => pipesPositions;
-        set => pipesPositions = value ?? new List<Vector2>();
+        get => _pipesPositions;
+        set => _pipesPositions = value ?? new List<Vector2>();
+    }
+
+    public HashSet<int> OwnedRockets
+    {
+        get => _ownedRockets;
+        set => _ownedRockets = value ?? new HashSet<int>();
+    }
+
+    public int EquippedRocket
+    {
+        get => _equippedRocket;
+        set => _equippedRocket = value;
     }
 }

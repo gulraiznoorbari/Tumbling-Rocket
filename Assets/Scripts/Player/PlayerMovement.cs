@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
 {
     private Touch _touch;
     private Rigidbody2D _rigidbody;
+    private SpriteRenderer _spriteRenderer;
     private float _gravity;
     private bool _alreadyPlayed = false;
     private ParticleSystem.EmissionModule _smokeEmission;
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _gravity = _rigidbody.gravityScale;
         _smokeEmission = _smoke.emission;
         _flameEmission = _flame.emission;
@@ -121,5 +123,15 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
     public Transform GetPlayerPosition()
     {
         return gameObject.transform;
+    }
+
+    public Sprite GetPlayerCurrentSprite()
+    {
+        return _spriteRenderer.sprite;
+    }
+
+    public void SetPlayerSprite(Sprite sprite)
+    {
+        _spriteRenderer.sprite = sprite;
     }
 }
