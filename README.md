@@ -1,4 +1,16 @@
+
+#### TODO’s
+- Coins Spawning
+- Collision Detection + sound
+
+#### DONE:
+- Select from available/bought rockets (as current player sprite) + save the selection as well
+- Coin Addition on game over (menu)
+    - Keep track of the coins earned during the level and then add those in the total coins, on the game over menu.
+
+
 > This project was developed using Unity 2019.4.16f1
+
 
 ## 👨‍💻 Developer
 
