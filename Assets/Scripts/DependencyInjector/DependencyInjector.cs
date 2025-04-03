@@ -21,6 +21,7 @@ namespace DependencyInjector
         private void InjectDependencies()
         {
             _uiManager.GameHandler = _gameManager;
+            _uiManager.CurrencyHandler = _currency;
             _inventoryManager.PlayerHandler = _playerMovement;
             _inventoryManager.CurrencyHandler = _currency;
             _inventoryManager.SaveHandler = _saveManager;
@@ -28,6 +29,7 @@ namespace DependencyInjector
             _playerMovement.AudioHandler = _audioManager;
             _playerMovement.GameHandler = _gameManager;
             _playerMovement.UIHandler = _uiManager;
+            _playerMovement.CurrencyHandler = _currency;
             _gameManager.AudioHandler = _audioManager;
             _gameManager.SaveHandler = _saveManager;
             _gameManager.PlayerHandler = _playerMovement;

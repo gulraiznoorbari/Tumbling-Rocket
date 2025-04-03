@@ -9,6 +9,7 @@ TagManager:
   - ScoreDetector
   - Pipe
   - Audio
+  - Coin
   layers:
   - Default
   - TransparentFX

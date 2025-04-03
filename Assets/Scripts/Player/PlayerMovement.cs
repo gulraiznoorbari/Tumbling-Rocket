@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
     public IAudioManager AudioHandler { get; set; }
     public IGameManager GameHandler { get; set; }
     public IUIManager UIHandler { get; set; }
+    public ICurrency CurrencyHandler { get; set; }
 
     private void Awake()
     {
@@ -86,6 +87,12 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
         {
             GameHandler.IncreaseScore();
         }
+
+        if (collision.CompareTag("Coin"))
+        {
+            CurrencyHandler.AddLevelCoins(1);
+            Destroy(collision.gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -117,6 +124,7 @@ public class PlayerMovement : MonoBehaviour, IPlayerHandler
         _rigidbody.freezeRotation = true;
         Time.timeScale = 0f;
         GameHandler.SaveGameState();
+        CurrencyHandler.SetCoinsOnGameOver();
         UIHandler.EnableGameOverMenu();
     }
 

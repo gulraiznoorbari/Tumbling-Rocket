@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	
 	private ParticleSystem.EmissionModule flameEmission;
 	public IGameManager GameHandler { get; set; }
+	public ICurrency CurrencyHandler { get; set; }
 
 	private void Awake()
 	{
@@ -81,6 +82,7 @@ public class UIManager : MonoBehaviour, IUIManager
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		Time.timeScale = 0f;
+		CurrencyHandler.ResetLevelCoins();
 		_mainMenu.SetActive(true);
 		_gameStatePanel.SetActive(false);
 	}

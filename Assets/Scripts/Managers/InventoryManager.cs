@@ -79,7 +79,7 @@ public class InventoryManager : MonoBehaviour, IInventoryManager
         else
         {
             _buyButton.gameObject.SetActive(true);
-            var canAfford = CurrencyHandler.GetCoins() >= rocket.rocketCost;
+            var canAfford = CurrencyHandler.GetTotalCoins() >= rocket.rocketCost;
             _buyButton.interactable = canAfford;
             _notEnoughCoinsText.gameObject.SetActive(rocket.rocketCost > 0 && !canAfford);
         }
@@ -95,12 +95,12 @@ public class InventoryManager : MonoBehaviour, IInventoryManager
     private void OnBuyButtonClicked()
     {
         var rocket = _rocketDatabase.GetSelectedRocket(_selectedOption);
-        if (CurrencyHandler.GetCoins() < rocket.rocketCost)
+        if (CurrencyHandler.GetTotalCoins() < rocket.rocketCost)
         {
             ShowNotEnoughCoinsMessage();
             return;
         }
-        CurrencyHandler.Increment(-rocket.rocketCost);
+        CurrencyHandler.AddTotalCoins(-rocket.rocketCost);
         _ownedRockets.Add(_selectedOption);
         UpdateRocketData(_selectedOption);
         SaveOwnedRockets();
