@@ -2,61 +2,64 @@
 using System.Xml.Serialization;
 using UnityEngine;
 
-public class SaveManager : MonoBehaviour
+public class SaveManager : MonoBehaviour, ISaveManager
 {
-	public PlayerSave state;
-	public static SaveManager instance;
+    private PlayerSave state;
+    private string savePath;
 
-	private void Awake()
-	{
-		if (instance == null)
-		{
-			instance = this;
-		}
-		else
-		{
-			Destroy(gameObject);
-			return;
-		}
-		DontDestroyOnLoad(gameObject);
-		instance = this;
-		Load();
-	}
+    private void Awake()
+    {
+        savePath = Path.Combine(Application.persistentDataPath, "save.xml");
+        Load();
+    }
 
-	public void Save()
-	{
-		PlayerPrefs.SetString("save", Serialize<PlayerSave>(state));
-	}
+    public void Save()
+    {
+        var serializedData = Serialize<PlayerSave>(state);
+        File.WriteAllText(savePath, serializedData);
+    }
 
-	public void Load()
-	{
-		if (PlayerPrefs.HasKey("save"))
-		{
-			state = Deserialize<PlayerSave>(PlayerPrefs.GetString("save"));
-		}
-		else {
-			NewSave();
-		}
-	}
+    public void Load()
+    {
+        if (File.Exists(savePath))
+        {
+            var serializedData = File.ReadAllText(savePath);
+            state = Deserialize<PlayerSave>(serializedData);
+        }
+        else
+        {
+            NewSave();
+        }
+    }
 
-	private void NewSave()
-	{
-		state = new PlayerSave();
-		Save();
-	}
+    public PlayerSave GetCurrentGameState()
+    {
+        return state;
+    }
 
-	private string Serialize<T>(T toSerialize)
-	{
-		XmlSerializer xml = new XmlSerializer(typeof(T));
-		StringWriter writer = new StringWriter();
-		xml.Serialize(writer, toSerialize);
-		return writer.ToString();
-	}
+    public void UpdateGameState(PlayerSave newState)
+    {
+        state = newState;
+    }
 
-	private T Deserialize<T>(string toDeserialize)
-	{
-		XmlSerializer xml = new XmlSerializer(typeof(T));
-		var reader = new StringReader(toDeserialize);
-		return (T)xml.Deserialize(reader);
-	}
+    private void NewSave()
+    {
+        state = new PlayerSave();
+        Save();
+    }
+
+    private string Serialize<T>(T toSerialize)
+    {
+        var xml = new XmlSerializer(typeof(T));
+        using var writer = new StringWriter();
+        xml.Serialize(writer, toSerialize);
+        return writer.ToString();
+    }
+
+    private T Deserialize<T>(string toDeserialize)
+    {
+        var xml = new XmlSerializer(typeof(T));
+        using var reader = new StringReader(toDeserialize);
+        return (T)xml.Deserialize(reader);
+    }
 }
