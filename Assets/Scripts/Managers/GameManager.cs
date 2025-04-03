@@ -152,11 +152,12 @@ public class GameManager : MonoBehaviour, IGameManager
     private void SaveHighScore()
     {
         PlayerPrefs.SetInt("HighScore", _highScore);
+        PlayerPrefs.Save();
     }
 
     private void GetHighScore()
     {
-        _highScore = PlayerPrefs.GetInt("HighScore");
+        _highScore = PlayerPrefs.GetInt("HighScore", 0);
     }
 
     public void PauseGame()
